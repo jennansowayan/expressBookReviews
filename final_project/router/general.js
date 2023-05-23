@@ -29,8 +29,14 @@ function getBookList() {
 
 // Get the book list available in the shop
 public_users.get('/', async function (req, res) {
-  const list = await getBookList();
-  res.send(list);
+  try{
+    const list = await getBookList();
+    res.send(list);
+
+  }
+  catch(err){
+    res.status(404).send(err)
+  }
 });
 
 function getBookByIsbn(isbn) {
@@ -55,9 +61,14 @@ function getBookByIsbn(isbn) {
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn', async function (req, res) {
+  try{
+    const book = await getBookByIsbn(req.params.isbn);
+    res.send(book)
+  }
+  catch(err){
+    res.status(404).send(err)
+  }
   
-  const book = await getBookByIsbn(req.params.isbn);
-  res.send(book)
  });
   
  function getBooksByAuthor(author) {
@@ -116,8 +127,14 @@ function getBooksByTitle(title) {
 
 // Get all books based on title
 public_users.get('/title/:title', async function (req, res) {
-  const booksWithTitle = await getBooksByTitle(req.params.title);
+  try{
+    const booksWithTitle = await getBooksByTitle(req.params.title);
   res.send(booksWithTitle);
+  }
+  catch(err){
+    res.status(404).send(err)
+  }
+  
 });
 
 //  Get book review
