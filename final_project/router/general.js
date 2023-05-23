@@ -12,7 +12,7 @@ public_users.post("/register", (req,res) => {
   if (username && password) {
     if (!isValid(username)) { 
       users.push({"username":username,"password":password});
-      return res.status(200).json({message: "User successfully registred. Now you can login"});
+      return res.status(200).json({message: `${username} successfully registred.`});
     } else {
       return res.status(404).json({message: "User already exists!"});    
     }
@@ -46,10 +46,11 @@ public_users.get('/isbn/:isbn',function (req, res) {
   
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
-  if(req.params.author){
-    var author = req.params.author, booksByAuthor = [];
-    
-    for (let i = 0; i < books.length; i++) {      
+  let booksByAuthor = [];
+    if(req.params.author){
+    var author = req.params.author.replace("_"," ");
+    var length = Object.keys(books).length
+    for (let i = 1; i < length; i++) {      
       if(books[i].author == author){
         booksByAuthor.push(books[i]);
       }
@@ -59,7 +60,7 @@ public_users.get('/author/:author',function (req, res) {
       return res.status(200).send(booksByAuthor);
     }
     else{
-      return res.status(404).json({message: "There are no books found by this author"});
+        return res.status(404).json({message: "There are no books found by this author"});
     }
   }
   else{
@@ -71,8 +72,8 @@ public_users.get('/author/:author',function (req, res) {
 public_users.get('/title/:title',function (req, res) {
   if(req.params.title){
     var title = req.params.title, booksWithTitle = [];
-    
-    for (let i = 0; i < books.length; i++) {      
+    var length = Object.keys(books).length
+    for (let i = 1; i < length; i++) {      
       if(books[i].title == title){
         booksWithTitle.push(books[i]);
       }
@@ -93,10 +94,12 @@ public_users.get('/title/:title',function (req, res) {
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
   if(req.params.isbn){
-    var isbn = parseInt(req.params.isbn);
-    var book = books[isbn];
+    var isbn = parseInt(req.params.isbn),
+    book = books[isbn],
+    length = Object.keys(books).length
+
     if(book){
-      if(book.reviews.length > 0)
+      if(length > 0)
       {      
         return res.status(200).send(JSON.stringify(book.reviews));
       }    

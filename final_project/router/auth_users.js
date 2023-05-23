@@ -59,7 +59,7 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
       var username = req.session.authorization.username,
       review = req.body.review;
       book.reviews[username] = review
-      return res.status(200).send(book.reviews);
+      return res.status(200).send(`the review has been add : \n ${JSON.stringify(book.reviews)}`);
     }
     else{
       return res.status(401).json({message: "book not found"});
